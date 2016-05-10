@@ -64,9 +64,10 @@ function _failover() {
     httpRequest.onreadystatechange = function() {
       if (4 == httpRequest.readyState) {
         if (200 == httpRequest.status || 304 == httpRequest.status) {
-          // response received - parse the response
-          var parser = new DOMParser();
-          var doc = parser.parseFromString(httpRequest.responseText, "text/html");
+          // response received - create a html document
+          var doc = document.implementation.createHTMLDocument("");
+          // remove the DOCTYPE tag (if any) and insert the response into the document
+          doc.documentElement.innerHTML = httpRequest.responseText.replace(/^<!DOCTYPE.*>/, "");
           // extract the script tags from the response and insert them into the current document
           Array.prototype.slice.call(doc.getElementsByTagName("script")).forEach(function (element) {
             document.head.appendChild(document.importNode(element, true));

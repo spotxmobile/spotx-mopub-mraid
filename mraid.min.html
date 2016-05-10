@@ -8,14 +8,14 @@ var failover_tag = '<script type="text/javascript" charset="utf-8"> loaded=true;
 /************************** DO NOT MODIFY BELOW THIS LINE **************************/
   
 request += "&autoplay=1&autoinit=1&prefetch=1";
-function _failover(){document.head.innerHTML=failover_tag,document.write(document.documentElement.outerHTML),document.close()}!function(){function n(n,o){var e=window.setInterval(function(){void 0!==window[n]&&(window.clearInterval(e),o())},50)}var o=!1
-window.addEventListener("load",function e(){window.removeEventListener("load",e,!1),n("mraid",function(){mraid.addEventListener("ready",function(){n("oAdOS",function(){oAdOS.subscribe(function(){o||_failover()},"AdError"),oAdOS.subscribe(function(){o=!0},"AdImpression")})})})},!1)}()
+function _failover(){document.head.innerHTML=failover_tag,document.write(document.documentElement.outerHTML),document.close()}!function(){function e(e,n){var t=window.setInterval(function(){void 0!==window[e]&&(window.clearInterval(t),n())},50)}var n=!1
+window.addEventListener("load",function t(){window.removeEventListener("load",t,!1),e("mraid",function(){mraid.addEventListener("ready",function(){e("oAdOS",function(){oAdOS.subscribe(function(){n||_failover()},"AdError"),oAdOS.subscribe(function(){n=!0},"AdImpression")})})})},!1)}()
 </script>
 <script id="spotx-loader" type="text/javascript">
 !function(){window.addEventListener("load",function e(){window.removeEventListener("load",e,!1)
 var t=new XMLHttpRequest
-t.timeout=1e3*request_timeout,t.ontimeout=_failover,t.onreadystatechange=function(){if(4==t.readyState)if(200==t.status||304==t.status){var e=new DOMParser,o=e.parseFromString(t.responseText,"text/html")
-Array.prototype.slice.call(o.getElementsByTagName("script")).forEach(function(e){document.head.appendChild(document.importNode(e,!0))})
+t.timeout=1e3*request_timeout,t.ontimeout=_failover,t.onreadystatechange=function(){if(4==t.readyState)if(200==t.status||304==t.status){var e=document.implementation.createHTMLDocument("")
+e.documentElement.innerHTML=t.responseText.replace(/^<!DOCTYPE.*>/,""),Array.prototype.slice.call(e.getElementsByTagName("script")).forEach(function(e){document.head.appendChild(document.importNode(e,!0))})
 var n=document.getElementById("spotx-loader")
 n.parentNode.removeChild(n),document.write(document.documentElement.outerHTML),document.close()}else _failover()},t.open("GET",request,!0),t.send()},!1)}()
 </script>
