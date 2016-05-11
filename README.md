@@ -36,11 +36,11 @@ The `request_timeout` value is the number of seconds to wait for a response from
 example the value is set to `8` seconds.
 
 The `failover_tag` variable contains the custom `<script>` tag used by MoPub to indicate a failover condition.
-Normally this tag should not be modified, unless there are changes to the current MoPub MRAID container
+Do not modify this variable, unless there are changes to the current MoPub MRAID container
 specification - see the *Failover tag* section in the [MoPub Custom Networks](https://dev.twitter.com/mopub/ui-setup/custom-networks)
 document.
 
-In the current `mraid.html` and `mraid.min.html` files you must update the `var request = ...` parameter with your information. 
+In the current `mraid.html` and `mraid.min.html` files you must update the `var request = ...` parameter with the proper information. 
 ```javascript
 var request = "http://search.spotxchange.com/mraid/2.0/REPLACE_CHANNEL_ID?app[name]=REPLACE_ME&app[domain]=REPLACE_ME&app[bundle]=REPLACE_ME&device[devicetype]=1&device[ifa]=%eudid!&device[dnt]=%%DNT%%&cb=%%CACHEBUSTER%%";
 ```
@@ -86,8 +86,8 @@ The following table contains the currently supported parameters:
 values may not occur if the MRAID container app does not provide location services. 
 
 ###SpotX Custom Parameters
-There are additional parameters that are custom to SpotX.  These parameters are required, and automatically be appended to the SpotMarket request url.
-You should not have to modify these parameters.  The details of these parameters are provided here for completeness.
+There are additional parameters that are custom to SpotX.  These parameters are required, and will be automatically appended to the SpotMarket request url.
+You should not specify these parameters.  The details of these parameters are provided here for completeness.
 
 |Parameter              | Description | Default Usage |
 |-----------------------|-------------|---------------|
