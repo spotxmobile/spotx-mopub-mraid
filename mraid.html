@@ -1,92 +1,27 @@
-<script type="text/javascript">
-// SpotMarket MRAID request, including parameters
-var request = "http://search.spotxchange.com/mraid/2.0/REPLACE_CHANNEL_ID?app[name]=REPLACE_ME&app[domain]=REPLACE_ME&app[bundle]=REPLACE_ME&device[devicetype]=1&device[ifa]=REPLACE_ME&device[dnt]=%%DNT%%&cb=%%CACHEBUSTER%%";
-var request_timeout = 8; // in seconds
-// mopub specific failover tag (note the ending '<\/script>')
-var failover_tag = '<script type="text/javascript" charset="utf-8"> loaded=true; window.location="mopub://failLoad";<\/script>';
-
-/************************** DO NOT MODIFY BELOW THIS LINE **************************/
-
-request += "&autoplay=1&autoinit=1&prefetch=1";
-
-// failover method called when an ad network error occurs (no ad available)
-function _failover() {
-  // this tag is specific to MoPub (https://dev.twitter.com/mopub/ui-setup/custom-networks)
-  document.head.innerHTML = failover_tag;
-  document.write(document.documentElement.outerHTML);
-  document.close();
-}
-
-// VPAID error handler setup (in case of VPAID opt-out)
-(function () {
-  var impressed = false;
-  function waitFor(name, callback) {
-    // wait for the named object to be available
-    var id = window.setInterval(function () {
-      if (typeof window[name] !== "undefined") {
-        window.clearInterval(id);
-        callback();
-      }  
-    }, 50);
-  }
-  // wait for the page to finish loading before looking for the mraid and oAdOS objects
-  window.addEventListener("load", function load() {
-    window.removeEventListener("load", load, false);
-    waitFor("mraid", function() {
-      mraid.addEventListener("ready", function () {
-        waitFor("oAdOS", function () {
-          // subscribe to the the "AdError" event
-          oAdOS.subscribe(function () {
-            if (!impressed) {
-              // AdError fired and AdImpression not yet fired - call the failover method
-              _failover()              
-            }
-          }, "AdError");
-          oAdOS.subscribe(function () {
-            impressed = true;
-          }, "AdImpression");    
-        });
-      });
-    });
-  }, false);
-})();
-</script>
-<script id="spotx-loader" type="text/javascript">
-// This script block will be removed after the initial request to SpotMarket
-(function() {
-  // wait for the the initial page to finish loading before making the SpotMarket request
-  window.addEventListener("load", function load() {
-    window.removeEventListener("load", load, false);
-    var httpRequest = new XMLHttpRequest();
-    // setup a timeout handler - calls the failover if a timeout occurs
-    httpRequest.timeout = request_timeout * 1000;
-    httpRequest.ontimeout = _failover;
-    httpRequest.onreadystatechange = function() {
-      if (4 == httpRequest.readyState) {
-        if (200 == httpRequest.status || 304 == httpRequest.status) {
-          // response received - create a html document
-          var doc = document.implementation.createHTMLDocument("");
-          // remove the DOCTYPE tag (if any) and insert the response into the document
-          doc.documentElement.innerHTML = httpRequest.responseText.replace(/^<!DOCTYPE.*>/, "");
-          // extract the script tags from the response and insert them into the current document
-          Array.prototype.slice.call(doc.getElementsByTagName("script")).forEach(function (element) {
-            document.head.appendChild(document.importNode(element, true));
-          });
-          // remove this script tag from current document
-          var script = document.getElementById("spotx-loader");
-          script.parentNode.removeChild(script);
-          // rewrite the document
-          document.write(document.documentElement.outerHTML);
-          document.close();
-        }
-        else {
-          // all other http statuses cause a failover
-          _failover();
-        }      
+<!--
+  SCRIPT CONFIGURATION PARAMETERS:
+  data-channel-id      : SpotX Channel ID
+  data-request-params  : parameters sent to SpotMarket
+  data-request-timeout : ad request timeout in seconds
+  data-failover-script : contents of the MoPub failover script
+  src                  : url of the SpotX-MoPub MRAID script
+-->
+<script id="spotx-mopub-mraid" type="text/javascript"
+    data-channel-id="REPLACE_CHANNEL_ID"
+    data-request-params="app[name]=REPLACE_ME&app[domain]=REPLACE_ME&app[bundle]=REPLACE_ME&device[devicetype]=1&device[ifa]=%eudid!&device[dnt]=%%DNT%%&cb=%%CACHEBUSTER%%"
+    data-request-timeout="8"
+    data-failover-script='loaded=true; window.location="mopub://failLoad";'
+    src="http://m.spotx.tv/mopub-mraid/v1/mopub-mraid.js"
+></script>
+<!-- ************************** DO NOT MODIFY BELOW THIS LINE ************************** -->
+<script id="spotx-mopub-do-not-modify" type="text/javascript"
+  data-src-timeout="5">
+  (function () {
+    // check for the loading of the spotx-mopub-mraid.js script - failover if not loaded
+    window.setTimeout(function () {
+      if (!window["_spotx_mopub_loaded"]) {
+        eval(document.getElementById("spotx-mopub-mraid").getAttribute("data-failover-script"));
       }
-    }; 
-    httpRequest.open("GET", request, true);
-    httpRequest.send();
-  }, false);  
-})();
+    }, 1000 * document.getElementById("spotx-mopub-do-not-modify").getAttribute("data-src-timeout"));
+  })();
 </script>

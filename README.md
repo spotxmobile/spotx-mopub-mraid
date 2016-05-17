@@ -1,15 +1,9 @@
 # SpotX - MoPub MRAID Creative Script
 
 The SpotX MoPub MRAID creative script should be used to create MRAID creatives in the MoPub interface.
-
-There are two versions of the script in this repository:
-
-  * `mraid.html` (verbose)
-  
-  * `mraid.min.html` (minified)
-
-Both scripts contain identical functionality.  The `mraid.min.html` file has been minified
-using [UglifyJS2](https://github.com/mishoo/UglifyJS2). 
+The `mraid.html` file in this repository contains the entire script necessary to define a MoPub MRAID creative.
+The script acts as a "loader", which will handle making the request to the SpotX network to obtain a
+proper MRAID compliant advertisement.
 
 ##Usage
 To use the script, copy the *entire* text from a script file into the `'HTML Body'` section
@@ -20,35 +14,39 @@ since the functionality is identical.
 
 > Always make sure to check the `'MRAID Ad'` option.
 
-To customize the script you should only edit the first few lines.
-```javascript
-// SpotMarket MRAID request, including parameters
-var request = "http://search.spotxchange.com/mraid/2.0/123456?app[name]=myapp&app[domain]=myapp.foo.com&app[bundle]=com.foo.myapp&device[devicetype]=1&device[ifa]=%eudid!&device[dnt]=%%DNT%%&cb=%%CACHEBUSTER%%";
-var request_timeout = 8; // in seconds
-// mopub specific failover tag (note the ending '<\/script>')
-var failover_tag = '<script type="text/javascript" charset="utf-8"> loaded=true; window.location="mopub://failLoad";<\/script>';
+To customize the script you should only edit the `data-...` parameters of the `spotx-mopub-mraid` script tag.
+```html
+<script id="spotx-mopub-mraid" type="text/javascript"
+    data-channel-id="85394"
+    data-request-params="app[name]=myapp&app[domain]=myapp.mydomain.com&app[bundle]=com.mydomain.myapp&device[devicetype]=1&device[ifa]=%eudid!&device[dnt]=%%DNT%%&cb=%%CACHEBUSTER%%"
+    data-request-timeout="8"
+    data-failover-script='loaded=true; window.location="mopub://failLoad";'
+    src="http://m.spotx.tv/mopub-mraid/v1/mopub-mraid.js"
+></script>
 ```
-You should modify the `request` url with the SpotX Channel ID and the corresponding MRAID parameters.
-In the above example, the Channel ID is `123456`, and the parameters are the name value pairs after the
-`'?'` in the url. For more information see the section: [SpotMarket MRAID Request Parameters](#spotmarket-mraid-request-parameters) 
 
-The `request_timeout` value is the number of seconds to wait for a response from SpotX.  In the above
-example the value is set to `8` seconds.
+| Parameter              | Description |
+|------------------------|-------------|
+|`data-channel-id`       | The SpotX Channel ID to use for the SpotMarket request. |
+|`data-request-params`   | Name value pairs after the `'?'` in the SpotMarket request url. |
+|`data-request-timeout`  | The number of seconds to wait for the SpotMarket request to complete. |
+|`data-failover-script`  | The MoPub script called when a failover condition occurrs.<br/><br/>**Do not modify this parameter**, unless there are changes to the current MoPub MRAID container specification - see the Failover tag section in the MoPub Custom Networks document. |
+|`src`                   | The url to the `spotx-mopub-mraid.js` script file.<br/><br/>**Do not modify this parameter**, unless the location or version of the script file changes. |
 
-The `failover_tag` variable contains the custom `<script>` tag used by MoPub to indicate a failover condition.
-Do not modify this variable, unless there are changes to the current MoPub MRAID container
-specification - see the *Failover tag* section in the [MoPub Custom Networks](https://dev.twitter.com/mopub/ui-setup/custom-networks)
-document.
 
-In the current `mraid.html` and `mraid.min.html` files you must update the `var request = ...` parameter with the proper information. 
-```javascript
-var request = "http://search.spotxchange.com/mraid/2.0/REPLACE_CHANNEL_ID?app[name]=REPLACE_ME&app[domain]=REPLACE_ME&app[bundle]=REPLACE_ME&device[devicetype]=1&device[ifa]=%eudid!&device[dnt]=%%DNT%%&cb=%%CACHEBUSTER%%";
+In the current `mraid.html` and `mraid.min.html` files you must update the `data-channel-id` and `data-request-params` parameters with the proper information. 
+```html
+<script id="spotx-mopub-mraid" type="text/javascript"
+  data-channel-id="REPLACE_CHANNEL_ID"
+  data-request-params="app[name]=REPLACE_ME&app[domain]=REPLACE_ME&app[bundle]=REPLACE_ME&device[devicetype]=1&device[ifa]=%eudid!&device[dnt]=%%DNT%%&cb=%%CACHEBUSTER%%";
+    ...
+></script>
 ```
 You must replace the `REPLACE_CHANNEL_ID` text with the SpotX Channel ID you want to syndicate, and the `REPLACE_ME` text
 with the proper values, described in the [SpotMarket MRAID Request Parameters](#spotmarket-mraid-request-parameters) section.
 
 ##SpotMarket MRAID Request Parameters
-The SpotMarket MRAID url contains several parameters that must be specified in order to create the proper MRAID response.  When creating the url, you may also use
+The SpotMarket MRAID url contains several parameters (specified in the `data-request-params` parameter) that must be specified in order to create the proper MRAID response.  When creating the url, you may also use
 macros provided by MoPub for the parameter values.  These macros will be substituted with their corresponding values when the script is obtained by the client's MRAID container.
 For more information about the MoPub Macros, check out the [MoPub Documentation](https://dev.twitter.com/mopub/ui/macros). 
 The following table contains the currently supported parameters:
@@ -87,7 +85,7 @@ values may not occur if the MRAID container app does not provide location servic
 
 ###SpotX Custom Parameters
 There are additional parameters that are custom to SpotX.  These parameters are required, and will be automatically appended to the SpotMarket request url.
-You should not specify these parameters.  The details of these parameters are provided here for completeness.
+**You should not specify these parameters.**  The details of these parameters are provided here for completeness.
 
 |Parameter              | Description | Default Usage |
 |-----------------------|-------------|---------------|
