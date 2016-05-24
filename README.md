@@ -21,7 +21,7 @@ To customize the script you should only edit the `data-...` parameters of the `s
     data-request-params="app[name]=myapp&app[domain]=myapp.mydomain.com&app[bundle]=com.mydomain.myapp&device[devicetype]=1&device[ifa]=%eudid!&device[dnt]=%%DNT%%&cb=%%CACHEBUSTER%%"
     data-request-timeout="8"
     data-failover-script='loaded=true; window.location="mopub://failLoad";'
-    src="http://m.spotx.tv/mopub-mraid/v1/mopub-mraid.js"
+    src="http://m.spotx.tv/mraid/v1/mopub.js"
 ></script>
 ```
 
@@ -31,7 +31,7 @@ To customize the script you should only edit the `data-...` parameters of the `s
 |`data-request-params`   | Name value pairs after the `'?'` in the SpotMarket request url. |
 |`data-request-timeout`  | The number of seconds to wait for the SpotMarket request to complete. |
 |`data-failover-script`  | The MoPub script called when a failover condition occurrs.<br/><br/>**Do not modify this parameter**, unless there are changes to the current MoPub MRAID container specification - see the Failover tag section in the MoPub Custom Networks document. |
-|`src`                   | The url to the `spotx-mopub-mraid.js` script file.<br/><br/>**Do not modify this parameter**, unless the location or version of the script file changes. |
+|`src`                   | The url to the SpotX `mopub.js` script file.<br/><br/>**Do not modify this parameter**, unless the location or version of the script file changes. |
 
 
 In the current `mraid.html` and `mraid.min.html` files you must update the `data-channel-id` and `data-request-params` parameters with the proper information. 
