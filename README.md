@@ -88,10 +88,10 @@ The following parameters are specific to the operation of SpotMarket and the Ad 
 
 |Parameter              | Description / Example | Type | Usage |
 |-----------------------|-----------------------|------|-------|
-|`skippable`            | Is the advertisement skippable (1 = skippable, 0 or undefined = not skippable). | Integer | `skippable=1` |
-|`skippable_time`       | Number of milliseconds from the ad start after which the ad is considered skippable. | Integer | `skippable_time=5000` |
-|`media_transcoding[]`  | Media transcoding is provided to Spotmarket as a string or an array of values, with the following 3 options: `low`, `medium`, or `high`. (MRAID requests will default to `low`) | String or Array | `media_transcoding[]=low&media_transcoding[]=medium` |
-|`ad_unit`              | Set the type of ad unit to be used. Can be `instream`, or `incontent`. | String | `ad_unit=instream` |
+|`skippable`            | Is the advertisement skippable (1 = skippable, 0 or undefined = not skippable).<br/><br/>`skippable=1` | Integer | Optional |
+|`skippable_time`       | Number of milliseconds from the ad start after which the ad is considered skippable.<br/><br/>`skippable_time=5000` | Integer | Optional |
+|`media_transcoding[]`  | Media transcoding is provided to Spotmarket as a string or an array of values, with the following 3 options: `low`, `medium`, or `high`. (MRAID requests will default to `low`)<br/><br/>`media_transcoding[]=low&media_transcoding[]=medium` | String or Array | Recommended |
+|`ad_unit`              | Set the type of ad unit to be used. Can be `instream`, or `incontent`.<br/><br/>`ad_unit=instream` | String | Recommended |
 
 ###SpotX Internal Parameters
 There are additional parameters that are custom to SpotX.  These parameters are required, and will be automatically appended to the SpotMarket request url.
