@@ -16,12 +16,12 @@ since the functionality is identical.
 
 To customize the script you should only edit the `data-...` parameters of the `spotx-mopub-mraid` script tag.
 ```html
-<script id="spotx-mopub-mraid" type="text/javascript"
+<script id="spotx-mraid-loader" type="text/javascript"
     data-channel-id="85394"
-    data-request-params="app[name]=myapp&app[domain]=myapp.mydomain.com&app[bundle]=com.mydomain.myapp&device[devicetype]=1&device[ifa]=%eudid!&device[dnt]=%%DNT%%&cb=%%CACHEBUSTER%%"
+    data-request-params="app[name]=myapp&app[domain]=myapp.mydomain.com&app[bundle]=com.mydomain.myapp&media_transcoding[]=low&ad_unit=instream&device[devicetype]=1&device[ifa]=%eudid!&device[dnt]=%%DNT%%&cb=%%CACHEBUSTER%%"
     data-request-timeout="8"
     data-failover-script='loaded=true; window.location="mopub://failLoad";'
-    src="http://m.spotx.tv/mraid/v1/mopub.js"
+    src="http://m.spotx.tv/mraid/v1/spotx.js"
 ></script>
 ```
 
@@ -30,13 +30,13 @@ To customize the script you should only edit the `data-...` parameters of the `s
 |`data-channel-id`       | The SpotX Channel ID to use for the SpotMarket request. |
 |`data-request-params`   | Name value pairs after the `'?'` in the SpotMarket request url. |
 |`data-request-timeout`  | The number of seconds to wait for the SpotMarket request to complete. |
-|`data-failover-script`  | The MoPub script called when a failover condition occurrs.<br/><br/>**Do not modify this parameter**, unless there are changes to the current MoPub MRAID container specification - see the Failover tag section in the MoPub Custom Networks document. |
-|`src`                   | The url to the SpotX `mopub.js` script file.<br/><br/>**Do not modify this parameter**, unless the location or version of the script file changes. |
+|`data-failover-script`  | The script called when a failover condition occurrs.<br/><br/>**Do not modify this parameter**, unless there are changes to the current MoPub MRAID container specification - see the Failover tag section in the MoPub Custom Networks document. |
+|`src`                   | The url to the SpotX MRAID `spotx.js` script file.<br/><br/>**Do not modify this parameter**, unless the location or version of the script file changes. |
 
 
-In the current `mraid.html` and `mraid.min.html` files you must update the `data-channel-id` and `data-request-params` parameters with the proper information. 
+In the current `mraid.html` file, you must update the `data-channel-id` and `data-request-params` parameters with the proper information. 
 ```html
-<script id="spotx-mopub-mraid" type="text/javascript"
+<script id="spotx-mraid-loader" type="text/javascript"
   data-channel-id="REPLACE_CHANNEL_ID"
   data-request-params="app[name]=REPLACE_ME&app[domain]=REPLACE_ME&app[bundle]=REPLACE_ME&device[devicetype]=1&device[ifa]=%eudid!&device[dnt]=%%DNT%%&cb=%%CACHEBUSTER%%";
     ...
@@ -81,9 +81,19 @@ The following table contains the currently supported parameters:
 > <sup>1</sup> The parameter values may be found in the [OpenRTB API Specification 2.2](http://www.iab.com/wp-content/uploads/2015/06/OpenRTBAPISpecificationVersion2_2.pdf).<br/>
 > <sup>2</sup> IDFA, Android Advertising ID (if Google Play Services is integrated), or SHA1 Hashed Android Device ID (if Google Play Services is unavailable).  Macro typically used for the `device[ifa]` parameter.<br/>
 > <sup>3</sup> While `device[geo][lon]` and `device[geo][lat]` are optional, if either parameter is specified, then the other parameter must be specified.  The substitution of these
-values may not occur if the MRAID container app does not provide location services. 
+values may not occur if the MRAID container app does not provide location services.
 
-###SpotX Custom Parameters
+###SpotX Optional Parameters
+The following parameters are specific to the operation of SpotMarket and the Ad player.  These parameters are optional.
+
+|Parameter              | Description / Example | Type | Usage |
+|-----------------------|-----------------------|------|-------|
+|`skippable`            | Is the advertisement skippable (1 = skippable, 0 or undefined = not skippable). | Integer | `skippable=1` |
+|`skippable_time`       | Number of milliseconds from the ad start after which the ad is considered skippable. | Integer | `skippable_time=5000` |
+|`media_transcoding[]`  | Media transcoding is provided to Spotmarket as a string or an array of values, with the following 3 options: `low`, `medium`, or `high`. (MRAID requests will default to `low`) | String or Array | `media_transcoding[]=low&media_transcoding[]=medium` |
+|`ad_unit`              | Set the type of ad unit to be used. Can be `instream`, or `incontent`. | String | `ad_unit=instream` |
+
+###SpotX Internal Parameters
 There are additional parameters that are custom to SpotX.  These parameters are required, and will be automatically appended to the SpotMarket request url.
 **You should not specify these parameters.**  The details of these parameters are provided here for completeness.
 
@@ -93,7 +103,7 @@ There are additional parameters that are custom to SpotX.  These parameters are 
 |`autoplay`             | Automatically begin playing the creative when ready. | `autoplay=1` |
 |`prefetch`             | Fetch the creative on the server, at the time of the request. | `prefetch=1` |
 
-##Error Handling - MoPub Failover
+##Error Handling - MoPub Specific Failover
 MoPub provides a custom failover tag that may be executed in certain error conditions, such as network
 timeout, or no eligible ad available (no fill).  The MRAID script will automatically call the MoPub failover
 tag when these types of errors are detected.
