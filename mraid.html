@@ -31,6 +31,8 @@
     window.addEventListener("load", function load() {
       window.removeEventListener("load", load, false);
       waitFor("mraid", function() {
+        //HACK: make sure orientation changes are disabled! (required for Android)
+        mraid.setOrientationProperties( {"allowOrientationChange":false} );
         mraid.addEventListener("ready", function () {
           //HACK: make sure orientation changes are disabled!
           mraid.setOrientationProperties( {"allowOrientationChange":false} );
