@@ -33,6 +33,7 @@
       waitFor("mraid", function() {
         //HACK: make sure orientation changes are disabled! (required for Android)
         mraid.setOrientationProperties( {"allowOrientationChange":false} );
+        mraid.useCustomClose(true);
         mraid.addEventListener("ready", function () {
           //HACK: make sure orientation changes are disabled!
           mraid.setOrientationProperties( {"allowOrientationChange":false} );
