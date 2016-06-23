@@ -8,20 +8,45 @@
 -->
 <script id="spotx-mraid-loader" type="text/javascript"
     data-channel-id="REPLACE_CHANNEL_ID"
-    data-request-params="app[name]=REPLACE_ME&app[domain]=REPLACE_ME&app[bundle]=REPLACE_ME&device[devicetype]=1&device[ifa]=%eudid!&device[dnt]=%%DNT%%&cb=%%CACHEBUSTER%%"
+    data-request-params="app[name]=REPLACE_ME&app[domain]=REPLACE_ME&app[bundle]=REPLACE_ME&media_transcoding[]=low&ad_unit=instream&device[devicetype]=1&device[ifa]=%eudid!&device[dnt]=%%DNT%%&cb=%%CACHEBUSTER%%"
     data-request-timeout="8"
     data-failover-script='loaded=true; window.location="mopub://failLoad";'
     src="http://m.spotx.tv/mraid/v1/spotx.js"
 ></script>
 <!-- ************************** DO NOT MODIFY BELOW THIS LINE ************************** -->
-<script id="spotx-mopub-do-not-modify" type="text/javascript"
+<script type="text/javascript" src="mraid.js"></script>
+<script id="spotx-mraid-do-not-modify" type="text/javascript"
   data-src-timeout="5">
   (function () {
+    function waitFor(name, callback) {
+      // wait for the named object to be available
+      var id = window.setInterval(function () {
+        if (typeof window[name] !== "undefined") {
+          window.clearInterval(id);
+          callback();
+        }  
+      }, 50);
+    }
+    // wait for the page to finish loading before looking for the mraid and oAdOS objects
+    window.addEventListener("load", function load() {
+      window.removeEventListener("load", load, false);
+      waitFor("mraid", function() {
+        //HACK: make sure orientation changes are disabled! (required for Android)
+        mraid.setOrientationProperties( {"allowOrientationChange":false} );
+        mraid.useCustomClose(true);
+        mraid.addEventListener("ready", function () {
+          //HACK: make sure orientation changes are disabled!
+          mraid.setOrientationProperties( {"allowOrientationChange":false} );
+          mraid.useCustomClose(true);
+        });
+      });
+    }, false);
+    
     // check for the loading of the spotx-mopub-mraid.js script - failover if not loaded
     window.setTimeout(function () {
-      if (!window["_spotx_mopub_loaded"]) {
-        eval(document.getElementById("spotx-mopub-mraid").getAttribute("data-failover-script"));
+      if (!window["_spotx_mraid_loaded"]) {
+        eval(document.getElementById("spotx-mraid-loader").getAttribute("data-failover-script"));
       }
-    }, 1000 * document.getElementById("spotx-mopub-do-not-modify").getAttribute("data-src-timeout"));
+    }, 1000 * document.getElementById("spotx-mraid-do-not-modify").getAttribute("data-src-timeout"));
   })();
 </script>
