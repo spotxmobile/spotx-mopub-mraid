@@ -16,12 +16,13 @@ since the functionality is identical.
 
 To customize the script you should only edit the `data-...` parameters of the `spotx-mopub-mraid` script tag.
 ```html
-<script id="spotx-mopub-mraid" type="text/javascript"
+<!-- do not copy this sample, copy the contents of the mraid.html file above! --->
+<script id="spotx-mraid-loader" type="text/javascript"
     data-channel-id="85394"
     data-request-params="app[name]=myapp&app[domain]=myapp.mydomain.com&app[bundle]=com.mydomain.myapp&device[devicetype]=1&device[ifa]=%eudid!&device[dnt]=%%DNT%%&cb=%%CACHEBUSTER%%"
     data-request-timeout="8"
     data-failover-script='loaded=true; window.location="mopub://failLoad";'
-    src="http://m.spotx.tv/mraid/v1/mopub.js"
+    src="http://m.spotx.tv/mraid/v1/spotx.js"
 ></script>
 ```
 
@@ -36,7 +37,7 @@ To customize the script you should only edit the `data-...` parameters of the `s
 
 In the current `mraid.html` and `mraid.min.html` files you must update the `data-channel-id` and `data-request-params` parameters with the proper information. 
 ```html
-<script id="spotx-mopub-mraid" type="text/javascript"
+<script id="spotx-mraid-loader" type="text/javascript"
   data-channel-id="REPLACE_CHANNEL_ID"
   data-request-params="app[name]=REPLACE_ME&app[domain]=REPLACE_ME&app[bundle]=REPLACE_ME&device[devicetype]=1&device[ifa]=%eudid!&device[dnt]=%%DNT%%&cb=%%CACHEBUSTER%%";
     ...
