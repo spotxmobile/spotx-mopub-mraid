@@ -6,12 +6,12 @@
   data-failover-script : contents of the MoPub failover script
   src                  : url of the SpotX-MoPub MRAID script
 -->
-<script id="spotx-mopub-mraid" type="text/javascript"
+<script id="spotx-mraid-loader" type="text/javascript"
     data-channel-id="REPLACE_CHANNEL_ID"
     data-request-params="app[name]=REPLACE_ME&app[domain]=REPLACE_ME&app[bundle]=REPLACE_ME&device[devicetype]=1&device[ifa]=%eudid!&device[dnt]=%%DNT%%&cb=%%CACHEBUSTER%%"
     data-request-timeout="8"
     data-failover-script='loaded=true; window.location="mopub://failLoad";'
-    src="http://m.spotx.tv/mraid/v1/mopub.js"
+    src="http://m.spotx.tv/mraid/v1/spotx.js"
 ></script>
 <!-- ************************** DO NOT MODIFY BELOW THIS LINE ************************** -->
 <script id="spotx-mopub-do-not-modify" type="text/javascript"
